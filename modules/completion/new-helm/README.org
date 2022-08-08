@@ -22,7 +22,7 @@
 - [[#configuration][Configuration]]
   - [[#helm-mode][helm-mode]]
   - [[#icons][Icons]]
-  - [[#posframe][Posframe]]
+  - [[#helm-posframe][helm-posframe]]
 - [[#troubleshooting][Troubleshooting]]
 
 * Description
@@ -209,6 +209,13 @@ Icons are now included, and support 2 providers ([[https://github.com/domtronn/a
 By default, to maintain consistency we use =all-the-icons=; however if you wish
 to modify this you can do so using module flag +treemacs-icons.
 
-** Posframe
+** helm-posframe
+Have a look at helm-posframe.el, to see which variables are available to users.
+These variables can be configured from your DOOMDIR/config.el, using code similar to:
+
+(after! helm
+  (setq helm-posframe-border-width 16))
+
+The most important variables, available to users, are already getting an inital value in config.el in this directory. Search for "childframe" in that file.
 
 * Troubleshooting
