@@ -236,10 +236,14 @@ The most important variables, available to users, are already getting an inital 
 
 ** Known problems
 helm-help, does not work. This function is called when you do C-h m in a helm session.
-It is supposed to show buffer "*Helm Help*", but it fails to switch to that buffer.
+It is supposed to show buffer "*Helm Help*", but that buffer becomes obscured by the buffer where the helm session started.
+The error happens when org-string-width() is called from org-table-align().
 This problem is also in the old doom helm module.
 
-This functionality works in both emacs prelude, and spacemacs, so it is not a helm bug.
+This functionality works in both emacs prelude, and spacemacs.
 
-To see helm documentation do:
+However it is not a total loss: The help text is available in buffer "*Helm Help*" so just
+switch to that buffer, perhaps after leaving the Helm session that generated it.
+
+To see the general helm documentation do:
   M-x helm-documentation
