@@ -21,9 +21,11 @@
     - [[#search-1][Search]]
 - [[#configuration][Configuration]]
   - [[#helm-mode][helm-mode]]
+  - [[#helm][helm]]
   - [[#icons][Icons]]
   - [[#helm-posframe][helm-posframe]]
 - [[#troubleshooting][Troubleshooting]]
+  - [[#known-problems][Known problems]]
 
 * Description
 This module provides Helm integration for a variety of Emacs commands, as well as
@@ -36,13 +38,17 @@ For more info on Helm, see:
 ** Module Flags
 + =+childframe= Causes Helm to display in a floating child frame, above Emacs.
 + =+disable-helm-ff-lynx-style= Disable special action for <left>, <right> in find-file.
-+ =+fuzzy= Enables fuzzy completion for Helm searches.
-+ =+helm-find-file-at-point= Let helm handle find-file-at-point.
-+ =+helm-hide-mode-line= Hide mode line in helm windows.
-+ =+helm-mode= Enables helm-mode (use helm completion almost everywhere).
-+ =+helm-popup-layout= Define layout for helm popup window.
++ =+fuzzy= Enables fuzzy completion for Helm searches. Recommended.
++ =+helm-find-file-at-point= Let helm handle find-file-at-point. Change introduced 2017-06-09 without any explanation. Can someone provide an example where helm's
+  handling of this hurts?
++ =+helm-hide-mode-line= Hide mode line in helm windows. The mode line provides key map
+  help. Advice: Show modeline if you are not a helm expert.
++ =+helm-mode= Enable helm-mode (use helm completion almost everywhere).
++ =+helm-popup-layout= Define layout for helm popup window. Note that helm sessions provide
+  keybindings, to change the layout: C-t, C-c -, C-c %
+  This is independent of whether +helm-popup-layout is enabled or not.
 + =+icons= Enables icons (supports both =all-the-icons= and =treemacs= icons)
-+ =+remap-commands= Remap some emacs commands to helm commands
++ =+remap-commands= Remap some emacs commands to helm commands. Recommended.
 + =+remap-swiper= Remap swiper to swiper-helm.
 + =+treemacs-icons= When +icons enabled, use treemacs icon pack.
 
@@ -203,6 +209,14 @@ enabled, by adding the following to your doom config.el:
   (add-to-list 'helm-completing-read-handlers-alist (cons #'foo nil))
 )
 
+** helm
+helm-display-header-line is set to nil in config.el. A good setting for helm experts.
+If you are not an expert it is recommended to show the header line:
+- In DOOMDIR/config.el:
+
+(after! helm
+  (setq helm-display-header-line t))
+
 ** Icons
 Icons are now included, and support 2 providers ([[https://github.com/domtronn/all-the-icons.el][all-the-icons]] and [[https://github.com/Alexander-Miller/treemacs][treemacs]]).
 
@@ -219,3 +233,13 @@ These variables can be configured from your DOOMDIR/config.el, using code simila
 The most important variables, available to users, are already getting an inital value in config.el in this directory. Search for "childframe" in that file.
 
 * Troubleshooting
+
+** Known problems
+helm-help, does not work. This function is called when you do C-h m in a helm session.
+It is supposed to show buffer "*Helm Help*", but it fails to switch to that buffer.
+This problem is also in the old doom helm module.
+
+This functionality works in both emacs prelude, and spacemacs, so it is not a helm bug.
+
+To see helm documentation do:
+  M-x helm-documentation

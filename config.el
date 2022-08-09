@@ -94,7 +94,9 @@
   (add-to-list 'helm-completing-read-handlers-alist (cons #'consult-recoll nil)))
 
 (after! helm
-  (setq helm-display-header-line t))
+  (setq helm-display-header-line t
+        helm-ff-auto-update-initial-value t
+        helm-ff-DEL-up-one-level-maybe t))
 
 (after! helm
   (setq helm-posframe-border-width 16))
