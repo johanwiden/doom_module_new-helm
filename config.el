@@ -96,7 +96,19 @@
 (after! helm
   (setq helm-display-header-line t
         helm-ff-auto-update-initial-value t
-        helm-ff-DEL-up-one-level-maybe t))
+        helm-ff-DEL-up-one-level-maybe t)
 
-(after! helm
-  (setq helm-posframe-border-width 16))
+  (unless (featurep! :completion new-helm +helm-popup-layout)
+    (helm-autoresize-mode t))
+
+  (when (featurep! :completion new-helm +childframe)
+    (setq helm-posframe-border-width 16))
+
+  ;; Was bound to the consult variant
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  ;; Was bound to the vertico variant
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  )
+
+(after! helm-projectile
+  (helm-projectile-on))

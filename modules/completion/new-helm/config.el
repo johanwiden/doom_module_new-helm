@@ -12,6 +12,9 @@
 
 (use-package! helm
   :after helm-mode
+  :init
+  (customize-set-variable 'helm-multi-files-toggle-locate-binding "C-c L")
+
   :config
   (setq helm-candidate-number-limit 150
         ;; Remove extraineous helm UI elements
@@ -162,6 +165,7 @@
 
 
 (use-package! helm-projectile
+  :after helm
   :commands (helm-projectile-find-file
              helm-projectile-recentf
              helm-projectile-switch-project
@@ -183,7 +187,9 @@
 
 
 (use-package! helm-descbinds
-  :hook (helm-mode . helm-descbinds-mode))
+  :after helm
+  :config
+  (helm-descbinds-mode))
 
 
 (use-package! helm-icons
