@@ -5,8 +5,8 @@
 
 (use-package! helm-mode
   :config
-  (unless (featurep! +helm-find-file-at-point)
-    ;; helm is too heavy for `find-file-at-point'
+  (when (featurep! +find-file-at-point)
+    ;; helm is too heavy for `find-file-at-point' (is this still true?)
     (add-to-list 'helm-completing-read-handlers-alist (cons #'find-file-at-point nil))))
 
 
@@ -24,6 +24,12 @@
         ;; When calling `helm-semantic-or-imenu', don't immediately jump to
         ;; symbol at point
         helm-imenu-execute-action-at-once-if-one nil)
+
+  (when (and (featurep! +ack-grep) (executable-find "ack"))
+    (setq helm-grep-default-command
+       "ack -Hn --color --smart-case --no-group -- %p %f"
+       helm-grep-default-recurse-command
+       "ack -H --color --smart-case --no-group -- %p %f"))
 
   (when (featurep! +disable-helm-ff-lynx-style)
     ;; disable special behavior for left/right, M-left/right keys.
@@ -95,8 +101,7 @@
 
   (when (featurep! +helm-popup-layout)
     (setq helm-display-buffer-default-height 0.25)
-    (set-popup-rule! "^\\*helm" :vslot -100 :size 0.22 :ttl nil)
-  )
+    (set-popup-rule! "^\\*helm" :vslot -100 :size 0.22 :ttl nil))
 
   (when (featurep! +helm-hide-mode-line)
     ;; Hide the modeline in helm windows.

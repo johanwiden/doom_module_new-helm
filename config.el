@@ -111,4 +111,5 @@
   )
 
 (after! helm-projectile
+  ;; (setq projectile-switch-project-action 'helm-projectile)
   (helm-projectile-on))

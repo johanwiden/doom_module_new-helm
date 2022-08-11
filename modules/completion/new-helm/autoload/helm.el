@@ -70,7 +70,7 @@ workspace."
 
 ;;;###autoload
 (defun +helm/project-search (&optional arg initial-query directory)
-  "Performs a project search from the project root with ripgrep.
+  "Perform a project search from the project root with ripgrep.
 
 ARG (universal argument), include all files, even hidden or compressed ones, in
 the search."
@@ -83,7 +83,7 @@ the search."
 
 ;;;###autoload
 (defun +helm/project-search-from-cwd (&optional arg initial-query)
-  "Performs a project search recursively from the current directory.
+  "Perform a project search recursively from the current directory.
 
 If ARG (universal argument), include all files, even hidden or compressed ones."
   (interactive "P")

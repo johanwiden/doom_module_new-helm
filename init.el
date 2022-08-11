@@ -26,9 +26,9 @@
        ;;company           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        (new-helm           ; restructured helm module (more flags...)
+        +ack-grep
         ;;+childframe
         +fuzzy
-        +helm-find-file-at-point
         ;;+helm-popup-layout
         +helm-mode
         +icons

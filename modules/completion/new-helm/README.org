@@ -19,6 +19,7 @@
     - [[#general][General]]
     - [[#jump-to-files-buffers-or-projects][Jump to files, buffers or projects]]
     - [[#search-1][Search]]
+  - [[#autoloaded-functions][Autoloaded functions]]
 - [[#configuration][Configuration]]
   - [[#helm-mode][helm-mode]]
   - [[#helm][helm]]
@@ -38,12 +39,13 @@ For more info on Helm, see:
 - https://tuhdo.github.io/helm-intro.html
 
 ** Module Flags
++ =+ack-grep= Configure helm-ff-do-grep to use "ack" instead of "grep" for searching.
 + =+childframe= Causes Helm to display in a floating child frame, above Emacs.
 + =+disable-helm-ff-lynx-style= Disable special action for <left>, <right> in find-file.
 + =+fuzzy= Enables fuzzy completion for Helm searches. Recommended. One then gets both fuzzy matching and regular helm matching. For example, try something similar to https://tuhdo.github.io/helm-intro.html#orgheadline2 where tuhdo searches for the file i5100_edac.c. You should find that this works also when fuzzy matching is enabled.
   Helm uses emacs completion-styles. This is true even if fuzzy in not enabled.
   For more about emacs completion-styles see https://www.masteringemacs.org/article/understanding-minibuffer-completion.
-+ =+helm-find-file-at-point= Let helm handle find-file-at-point. Change introduced 2017-06-09 without any explanation. Can someone provide an example where helm's
++ =+find-file-at-point= Don't let helm handle find-file-at-point. Change introduced 2017-06-09 without any explanation. Can someone provide an example where helm's
   handling of this hurts?
 + =+helm-hide-mode-line= Hide mode line in helm windows. The mode line provides key map
   help. Advice: Show modeline if you are not a helm expert.
@@ -102,23 +104,24 @@ of Doom-specific features are shown below:
 Similar to Ivy, this module provides an interface to
 navigate within a project using =projectile=:
 
-| Keybind              | Description                         |
-|----------------------+-------------------------------------|
-| =SPC p f=, =SPC SPC= | Jump to file in project             |
-| =SPC f f=, =SPC .=   | Jump to file from current directory |
-| =SPC s i=            | Jump to symbol in file              |
+| Keybind              | Description                                           |
+|----------------------+-------------------------------------------------------|
+| =SPC p f=, =SPC SPC= | Jump to file in project  (+helm/projectile-find-file)  |
+| =SPC f f=, =SPC .=   | Jump to file from current directory  (helm-find-files) |
+| =SPC s i=            | Jump to symbol in file                                |
 
 ** Project search & replace
 This module also provides interacetive text search and replace using ripgrep
 
 *** Search
 
-| Keybind   | Description              |
-|-----------+--------------------------|
-| =SPC s p= | Search project           |
-| =SPC s P= | Search another project   |
-| =SPC s d= | Search this directory    |
-| =SPC s D= | Search another directory |
+| Keybind   | Description                                            |
+|-----------+--------------------------------------------------------|
+| =SPC s p= | Search project (+default/search-project)               |
+| =SPC s P= | Search another project  (+default/search-other-project) |
+| =SPC s d= | Search this directory (+default/search-cwd)            |
+| =SPC s D= | Search another directory (+default/search-other-cwd)   |
+
 Prefixing these keys with the universal argument (=SPC u= for evil users; =C-u=
 otherwise) changes the behavior of these commands, instructing the underlying
 search engine to include ignored files.
@@ -170,27 +173,46 @@ Helm also has a number of overrides for built-in functionality:
 | =SPC '=        | Resume last ivy session   |
 
 *** Jump to files, buffers or projects
-| Keybind              | Description                           |
-|----------------------+---------------------------------------|
-| =SPC RET=            | Find bookmark                         |
-| =SPC f f=, =SPC .=   | Browse from current directory         |
-| =SPC p f=, =SPC SPC= | Find file in project                  |
-| =SPC f r=            | Find recently opened file             |
-| =SPC p p=            | Open another project                  |
-| =SPC b b=, =SPC ,=   | Switch to buffer in current workspace |
-| =SPC b B=, =SPC <=   | Switch to buffer                      |
+| Keybind              | Description                                           |
+|----------------------+-------------------------------------------------------|
+| =SPC RET=            | Find bookmark                                         |
+| =SPC f f=, =SPC .=   | Browse from current directory (helm-find-files)       |
+| =SPC p f=, =SPC SPC= | Find file in project (+helm/projectile-find-file)     |
+| =SPC f r=            | Find recently opened file                             |
+| =SPC p p=            | Open another project (helm-projectile-switch-project) |
+| =SPC b b=, =SPC ,=   | Switch to buffer in current workspace                 |
+| =SPC b B=, =SPC <=   | Switch to buffer                                      |
 
 *** Search
-| Keybind   | Description                               |
-|-----------+-------------------------------------------|
-| =SPC p t= | List all TODO/FIXMEs in project           |
-| =SPC s b= | Search the current buffer                 |
-| =SPC s d= | Search this directory                     |
-| =SPC s D= | Search another directory                  |
-| =SPC s i= | Search for symbol in current buffer       |
-| =SPC s p= | Search project                            |
-| =SPC s P= | Search another project                    |
-| =SPC s s= | Search the current buffer (incrementally) |
+| Keybind   | Description                                                        |
+|-----------+--------------------------------------------------------------------|
+| =SPC p t= | List all TODO/FIXMEs in project                                    |
+| =SPC s b= | Search the current buffer (+default/search-buffer)                 |
+| =SPC s d= | Search this directory (+default/search-cwd)                        |
+| =SPC s D= | Search another directory (+default/search-other-cwd)               |
+| =SPC s i= | Search for symbol in current buffer                                |
+| =SPC s p= | Search project (+default/search-project)                           |
+| =SPC s P= | Search another project (+default/search-other-project)             |
+| =SPC s s= | Search the current buffer (incrementally) (+default/search-buffer) |
+
+** Autoloaded functions
++helm/projectile-find-file:
+- Call `helm-find-files' if called from HOME, otherwise `helm-projectile-find-file'.
+
++helm/workspace-buffer-list:
+- A version of `helm-buffers-list' with its buffer list restricted to the current workspace.
+
++helm/workspace-mini:
+- A version of `helm-mini' with its buffer list restricted to the current workspace.
+
++helm-file-search:
+- Conduct a file search using ripgrep.
+
++helm/project-search:
+- Perform a project search from the project root with ripgrep.
+
++helm/project-search-from-cwd
+- Perform a project search recursively from the current directory.
 
 * Configuration
 
@@ -246,7 +268,11 @@ See: https://github.com/bbatsov/helm-projectile, section Usage.
 This can be configured in your DOOMDIR/config.el, using code similar to:
 
 (after! helm-projectile
+  ;; (setq projectile-switch-project-action 'helm-projectile)
   (helm-projectile-on))
+
+You may also want to change variable projectile-switch-project-action, as suggested in https://tuhdo.github.io/helm-projectile.html, but doom already has a useful setting for that variable, that puts each project in its own workspace. See doom module :ui workspaces.
+The helm module also defines workspace/project related commands such as +helm/workspace-mini.
 
 * Troubleshooting
 
