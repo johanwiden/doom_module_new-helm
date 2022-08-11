@@ -1,6 +1,7 @@
 #+TITLE:   :completion new-helm
 #+DATE:    August 11, 2022
-#+SINCE:   v2.0
+#+CREATED: August 11, 2022
+#+SINCE:   v2.0.9
 #+STARTUP: inlineimages
 
 * Table of Contents :TOC_3:noexport:
@@ -8,7 +9,7 @@
   - [[#maintainers][Maintainers]]
   - [[#module-flags][Module Flags]]
     - [[#childframe-change-of-implementation][childframe, change of implementation]]
-  - [[#plugins][Plugins]]
+  - [[#packages][Packages]]
 - [[#prerequisites][Prerequisites]]
 - [[#features][Features]]
   - [[#jump-to-navigation][Jump-to navigation]]
@@ -78,7 +79,7 @@ To work around this problem, the implementation was changed to instead use packa
 
 Note also that helm has built in fuctionality for displaying the completion buffer in a separate frame. See https://github.com/emacs-helm/helm/wiki/frame
 
-** Plugins
+** Packages
 + [[https://github.com/emacs-helm/helm][helm]]
 + [[https://github.com/microamp/helm-rg][helm-rg]]
 + [[https://github.com/emacs-jp/helm-c-yasnippet][helm-c-yasnippet]]
