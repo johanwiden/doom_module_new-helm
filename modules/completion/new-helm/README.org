@@ -1,45 +1,15 @@
-#+TITLE:   :completion new-helm
-#+DATE:    August 11, 2022
-#+CREATED: August 11, 2022
-#+SINCE:   v2.0.9
-#+STARTUP: inlineimages
+#+title:    :completion new-helm
+#+subtitle: A tank for hunting a house fly
+#+created: August 11, 2022
+#+since:   2.0.9
 
-* Table of Contents :TOC_3:noexport:
-- [[#description][Description]]
-  - [[#maintainers][Maintainers]]
-  - [[#module-flags][Module Flags]]
-    - [[#childframe-change-of-implementation][childframe, change of implementation]]
-  - [[#packages][Packages]]
-- [[#installation][Installation]]
-- [[#prerequisites][Prerequisites]]
-- [[#usage][Usage]]
-  - [[#jump-to-navigation][Jump-to navigation]]
-  - [[#project-search--replace][Project search & replace]]
-    - [[#search][Search]]
-    - [[#replace][Replace]]
-  - [[#in-buffer-searching][In-buffer searching]]
-  - [[#helm-integration-for-various-completing-commands][Helm integration for various completing commands]]
-    - [[#general][General]]
-    - [[#jump-to-files-buffers-or-projects][Jump to files, buffers or projects]]
-    - [[#search-1][Search]]
-  - [[#autoloaded-functions][Autoloaded functions]]
-- [[#configuration][Configuration]]
-  - [[#helm-mode][helm-mode]]
-  - [[#helm][helm]]
-    - [[#helm-multi-files][helm-multi-files]]
-    - [[#annotations][annotations]]
-  - [[#icons][Icons]]
-  - [[#helm-posframe][helm-posframe]]
-  - [[#helm-projectile][helm-projectile]]
-- [[#troubleshooting][Troubleshooting]]
-
-* Description
+* Description :unfold:
 This module provides Helm integration for a variety of Emacs commands, as well as
-a unified interface for project search and replace, powered by =ripgrep=.
+a unified interface for project search and replace, powered by [[https://github.com/BurntSushi/ripgrep][ripgrep]].
 
 For more info on Helm, see:
-- https://rnchzn.github.io/helm/doc/helm-manual.html
-- https://tuhdo.github.io/helm-intro.html
+- [[https://rnchzn.github.io/helm/doc/helm-manual.html]]
+- [[https://tuhdo.github.io/helm-intro.html]]
 
 ** Maintainers
 - @Johan_Widen
@@ -47,75 +17,97 @@ For more info on Helm, see:
 ** Module Flags
 - +ack-grep ::
   Configure ~helm-ff-do-grep~ to use [[https://beyondgrep.com/][ack]] instead of [[https://www.gnu.org/software/grep/][grep]] for searching.
+
 - +autoresize ::
-  The helm session window will be created within the current window. The session window height will be dynamically adjusted when few completion candidates remain.
+  The helm session window will be created within the current window.
+  The session window height will be dynamically adjusted when few completion
+  candidates remain.
+
 - +childframe ::
   Causes Helm to display in a floating child frame, above Emacs.
+
 - +disable-helm-ff-lynx-style ::
-  Disable special action for <left>, <right> in ~find-file~.
+  Disable special action for [[kbd:][<left>]], [[kbd:][<right>]] in ~find-file~.
+
 - +fuzzy ::
-  Enables fuzzy completion for Helm searches. Recommended. One then gets both fuzzy matching and regular helm matching. For example, try something similar to https://tuhdo.github.io/helm-intro.html#orgheadline2 where tuhdo searches for the file i5100_edac.c. You should find that this works also when fuzzy matching is enabled.
-  Helm uses emacs builtin ~completion-styles~. This is true even if fuzzy in not enabled.
-  For more about emacs completion-styles see https://www.masteringemacs.org/article/understanding-minibuffer-completion.
+  Enables fuzzy completion for Helm searches. Recommended. One then gets both
+  fuzzy matching and regular helm matching.
+  Helm uses emacs builtin ~completion-styles~. This is true even if fuzzy is
+  not enabled.
+
 - +find-file-at-point ::
-  Don't let helm handle ~find-file-at-point~. Change introduced 2017-06-09 without any explanation. Can someone provide an example where helm's handling of this hurts?
+  Don't let helm handle ~find-file-at-point~. Change introduced 2017-06-09
+  without any explanation. Can someone provide an example where helm's
+  handling of this hurts?
+
 - +helm-hide-mode-line ::
   Hide mode line in helm windows. The mode line provides key map
   help. Advice: Show modeline if you are not a helm expert.
+
 - +helm-mode ::
   Enable ~helm-mode~ (use helm completion almost everywhere).
+
 - +helm-popup-layout ::
   Define layout for helm popup window. Note that helm sessions provide
-  keybindings, to change the layout: C-t, C-c -, C-c %
-  This is independent of whether '+helm-popup-layout' is enabled or not.
+  keybindings, to change the layout: [[kbd:][C-t]], [[kbd:][C-c -]], [[kbd:][C-c %]]
+  This is independent of whether [[doom-module:][+helm-popup-layout]] is enabled or not.
+
 - +icons ::
   Enables icons (supports both [[doom-package:][all-the-icons]] and [[doom-package:][treemacs]] icons)
+
 - +remap-commands ::
   Remap some emacs commands to helm commands. Recommended.
+
 - +remap-swiper ::
   Remap ~swiper~ to ~swiper-helm~.
-- +treemacs-icons ::
-  When +icons enabled, use [[doom-package:][treemacs]] icon pack.
 
-Remember to run "doom sync" when you enable or disable a module flag in init.el.
+- +treemacs-icons ::
+  When [[doom-module:][+icons]] enabled, use [[doom-package:][treemacs]] icon pack.
+
+Remember to run "doom sync" when you enable or disable a module flag in
+=init.el=.
 
 *** childframe, change of implementation
-The implementation of [[doom-module:][+childframe]] in the old doom helm module, no longer works.
+The implementation of [[doom-module:][+childframe]] in the old [[doom-module:][helm]]
+module, no longer works.
 
 Enabling this causes emacs to crash, when closing the childframe.
-Error message: Error in post-command-hook (winner-save-old-configurations): (wrong-type-argument frame-live-p #<dead frame ...>)
 
-It might be a good idea to compare code with https://github.com/tumashu/company-posframe,
-ivy-posframe and https://github.com/tumashu/vertico-posframe.
+It might be a good idea to compare code with
+[[https://github.com/tumashu/company-posframe]],
+ivy-posframe and [[https://github.com/tumashu/vertico-posframe]].
 
-To work around this problem, the implementation was changed to instead use package ~helm-posframe~.
+To work around this problem, the implementation was changed to instead use
+package [[doom-package:][helm-posframe]].
 
-Note also that helm has built in functionality for displaying the completion buffer in a separate frame. See https://github.com/emacs-helm/helm/wiki/frame
+Note also that helm has built in functionality for displaying the completion
+buffer in a separate frame.
+See [[https://github.com/emacs-helm/helm/wiki/frame]].
 
 ** Packages
-+ [[doom-package:][helm]]
-+ [[doom-package:][helm-rg]]
-+ [[doom-package:][helm-c-yasnippet]]
-+ [[doom-package:][helm-company]]
-+ [[doom-package:][helm-describe-modes]]
-+ [[doom-package:][helm-projectile]]
-+ [[doom-package:][helm-swiper]]
-+ [[doom-package:][helm-descbinds]]
-+ [[doom-package:][helm-flx]]* if [[doom-module:][+fuzzy]]
-+ [[doom-package:][helm-posframe]]* if [[doom-module:][+childframe]]
-+ [[doom-package:][helm-org]]* if [[doom-module:][:lang org]]
-+ [[doom-package:]]* if [[doom-module:][+icons]]
+- [[doom-package:][helm]]
+- [[doom-package:][helm-rg]]
+- [[doom-package:][helm-c-yasnippet]]
+- [[doom-package:][helm-company]]
+- [[doom-package:][helm-describe-modes]]
+- [[doom-package:][helm-projectile]]
+- [[doom-package:][helm-swiper]]
+- [[doom-package:][helm-descbinds]]
+- [[doom-package:][helm-flx]]* if [[doom-module:][+fuzzy]]
+- [[doom-package:][helm-posframe]]* if [[doom-module:][+childframe]]
+- [[doom-package:][helm-org]]* if [[doom-module:][:lang org]]
+- [[doom-package:][helm-icons]]* if [[doom-module:][+icons]]
 
 * Installation
 [[id:01cffea4-3329-45e2-a892-95a384ab2338][Enable this module in your ~doom!~ block.]]
 
-This module has only one requirement: [[https://github.com/BurntSushi/ripgrep][Ripgrep]], which is a hard dependency of
+This module has only one requirement: [[https://github.com/BurntSushi/ripgrep][ripgrep]], which is a hard dependency of
 Doom itself, so you should already have it installed.
 
 Otherwise, Helm provides many commands to interface with a variety of programs
 from [[https://github.com/junegunn/fzf][fzf]] to [[https://kapeli.com/dash][Dash docsets]] to [[https://www.passwordstore.org/][pass]] and /much/ more. These programs are optional
 for this module, but must be installed if you intend to use their associated
-Helm command or plugin.
+Helm command or package.
 
 * Prerequisites
 Requires that at least one of:
@@ -126,21 +118,24 @@ Requires that at least one of:
 Otherwise commands such as [[kbd:][M-x]] will have very limited completion functionality.
 
 * Usage
-Much like Ivy, Helm is a /large/ framework and as such covering everything is not in scope, however a number of Doom-specific features are shown below:
+Much like [[doom-package:][ivy]] and [[doom-package:][vertico]], [[doom-package:][helm]] is a /large/ framework. Covering all its
+features is not within the scope of this module's documentation, so only its
+highlights will be covered here.
 
 ** Jump-to navigation
-Similar to Ivy, this module provides an interface to navigate within a project using [[doom-package:][projectile]]:
-| Keybind                              | Description                                              |
-|--------------------------------------+----------------------------------------------------------|
+Similar to Ivy, this module provides an interface to navigate within a project
+using [[doom-package:][projectile]]:
+| Keybind          | Description                                              |
+|------------------+----------------------------------------------------------|
 | [[kbd:][SPC p f]], [[kbd:][SPC SPC]] | Jump to file in project  (~+helm/projectile-find-file~)  |
 | [[kbd:][SPC f f]], [[kbd:][SPC .]]   | Jump to file from current directory  (~helm-find-files~) |
-| [[kbd:][SPC s i]]                    | Jump to symbol in file                                   |
+| [[kbd:][SPC s i]]          | Jump to symbol in file                                   |
 
 ** Project search & replace
-This module also provides interacetive text search and replace using [[https://github.com/BurntSushi/ripgrep][ripgrep]]
+This module also provides interactive text search and replace using [[https://github.com/BurntSushi/ripgrep][ripgrep]]
 *** Search
-| Keybind           | Description                                               |
-|-------------------+-----------------------------------------------------------|
+| Keybind | Description                                               |
+|---------+-----------------------------------------------------------|
 | [[kbd:][SPC s p]] | Search project (~+default/search-project~)                |
 | [[kbd:][SPC s P]] | Search another project  (~+default/search-other-project~) |
 | [[kbd:][SPC s d]] | Search this directory (~+default/search-cwd~)             |
@@ -162,8 +157,8 @@ commands.
 
 *** Replace
 These keybindings are available while a search is active:
-| Keybind           | Description                                   |
-|-------------------+-----------------------------------------------|
+| Keybind | Description                                   |
+|---------+-----------------------------------------------|
 | [[kbd:][C-c C-o]] | Open a buffer with your search results        |
 | [[kbd:][C-c C-e]] | Open a writable buffer of your search results |
 | [[kbd:][C-SPC]]   | Preview the current candidate                 |
@@ -177,7 +172,7 @@ users).
 The [[doom-package:][swiper]] package provides an interactive buffer search.
 The package [[doom-package:][swiper-helm]], provides a special helm interface to swiper.
 In addition, module flag [[doom-module:][+remap-swiper]] rebinds the ~swiper~ key bindings to ~swiper-helm~.
-
+It can be invoked with:
 - [[kbd:][SPC s s]] (~swiper-isearch~)
 - [[kbd:][SPC s S]] (~swiper-isearch-thing-at-point~)
 - [[kbd:][SPC s b]] (~swiper~)
@@ -189,25 +184,25 @@ A [[doom-package:][wgrep]] buffer can be opened from swiper with [[kbd:][C-c C-e
 Helm also has a number of overrides for built-in functionality:
 
 *** General
-| Keybind                        | Description               |
-|--------------------------------+---------------------------|
+| Keybind    | Description               |
+|------------+---------------------------|
 | [[kbd:][M-x]], [[kbd:][SPC :]] | Smarter, smex-powered M-x |
-| [[kbd:][SPC ']]                | Resume last ivy session   |
+| [[kbd:][SPC ']]      | Resume last ivy session   |
 
 *** Jump to files, buffers or projects
-| Keybind                              | Description                                             |
-|--------------------------------------+---------------------------------------------------------|
-| [[kbd:][SPC RET]]                    | Find bookmark                                           |
+| Keybind          | Description                                             |
+|------------------+---------------------------------------------------------|
+| [[kbd:][SPC RET]]          | Find bookmark                                           |
 | [[kbd:][SPC f f]], [[kbd:][SPC .]]   | Browse from current directory (~helm-find-files~)       |
 | [[kbd:][SPC p f]], [[kbd:][SPC SPC]] | Find file in project (~+helm/projectile-find-file~)     |
-| [[kbd:][SPC f r]]                    | Find recently opened file                               |
-| [[kbd:][SPC p p]]                    | Open another project (~helm-projectile-switch-project~) |
+| [[kbd:][SPC f r]]          | Find recently opened file                               |
+| [[kbd:][SPC p p]]          | Open another project (~helm-projectile-switch-project~) |
 | [[kbd:][SPC b b]], [[kbd:][SPC ,]]   | Switch to buffer in current workspace                   |
 | [[kbd:][SPC b B]], [[kbd:][SPC <]]   | Switch to buffer                                        |
 
 *** Search
-| Keybind           | Description                                                          |
-|-------------------+----------------------------------------------------------------------|
+| Keybind | Description                                                          |
+|---------+----------------------------------------------------------------------|
 | [[kbd:][SPC p t]] | List all TODO/FIXMEs in project                                      |
 | [[kbd:][SPC s b]] | Search the current buffer (~+default/search-buffer~)                 |
 | [[kbd:][SPC s d]] | Search this directory (~+default/search-cwd~)                        |
@@ -219,13 +214,16 @@ Helm also has a number of overrides for built-in functionality:
 
 ** Autoloaded functions
 ~+helm/projectile-find-file~:
-- Call ~helm-find-files~ if called from HOME, otherwise ~helm-projectile-find-file~.
+- Call ~helm-find-files~ if called from HOME,
+  otherwise ~helm-projectile-find-file~.
 
 ~+helm/workspace-buffer-list~:
-- A version of ~helm-buffers-list~ with its buffer list restricted to the current workspace.
+- A version of ~helm-buffers-list~ with its buffer list restricted to the
+  current workspace.
 
 ~+helm/workspace-mini~:
-- A version of ~helm-mini~ with its buffer list restricted to the current workspace.
+- A version of ~helm-mini~ with its buffer list restricted to the current
+  workspace.
 
 ~+helm-file-search~:
 - Conduct a file search using [[https://github.com/BurntSushi/ripgrep][ripgrep]].
@@ -241,17 +239,19 @@ Helm also has a number of overrides for built-in functionality:
 ** helm-mode
 helm-mode is part of package helm.
 
-To cite helm-mode documentation: "All functions in Emacs that use ~completing-read~,
-~read-file-name~, ~completion-in-region~ and friends will use helm interface when this
-mode is turned on."
+To cite helm-mode documentation: "All functions in Emacs that use
+~completing-read~, ~read-file-name~, ~completion-in-region~ and
+friends will use helm interface when this mode is turned on."
 
-The exceptions are certain functions listed in variable ~helm-completing-read-handlers-alist~,
-declared in package ~helm-mode~. The functions in this list are handled specially.
-In particular one can tell helm to let a function alone, by including it in this list.
-So, suppose you have some emacs command ~foo~ in package ~bar~ that uses a completion
-framework different from helm, say company, and this command stops working when ~helm-mode~
-is enabled. You may then be able to get ~foo~ to work again, while still having ~helm-mode~
-enabled, by adding the following to your =$DOOMDIR/config.el=:
+The exceptions are certain functions listed in variable
+~helm-completing-read-handlers-alist~, declared in package ~helm-mode~.
+The functions in this list are handled specially.
+In particular one can tell helm to let a function alone, by including it in
+this list. So, suppose you have some emacs command ~foo~ in package ~bar~
+that uses a completion framework different from helm, say company, and this
+command stops working when ~helm-mode~ is enabled. You may then be able to
+get ~foo~ to work again, while still having ~helm-mode~ enabled,
+by adding the following to your =$DOOMDIR/config.el=:
 
 #+begin_src emacs-lisp
 (after! (helm bar)
@@ -260,7 +260,8 @@ enabled, by adding the following to your =$DOOMDIR/config.el=:
 #+end_src
 
 ** helm
-~helm-display-header-line~ is set to nil in =config.el=. A good setting for helm experts.
+~helm-display-header-line~ is set to nil in =config.el=. A good setting for
+helm experts.
 If you are not an expert it is recommended to show the header line:
 - In =$DOOMDIR/config.el=:
 
@@ -270,12 +271,18 @@ If you are not an expert it is recommended to show the header line:
 #+end_src
 
 *** helm-multi-files
-~helm-multi-files~ can use locate as a source for file names. The default key binding for this now opens a keymap for ~helm-projectile~. The key binding to switch to using locate is now [[kbd:][C-c L]].
+~helm-multi-files~ can use locate as a source for file names.
+The default key binding for this now opens a keymap for ~helm-projectile~.
+The key binding to switch to using locate is now [[kbd:][C-c L]].
 
 *** annotations
-By default [[kbd:][M-x]] shows key bindings, if any. This is controlled by emacs builtin variable ~suggest-key-bindings~.
+By default [[kbd:][M-x]] shows key bindings, if any. This is controlled by
+emacs builtin variable ~suggest-key-bindings~.
 
-If you want more annotations you can set the emacs builtin variable ~completions-detailed~. It controls whether Emacs should include the docstring description for completion candidates in commands like ~describe-function~.
+If you want more annotations you can set the emacs builtin variable
+~completions-detailed~. It controls whether Emacs should include the
+docstring description for completion candidates in commands like
+~describe-function~.
 
 ** Icons
 Icons are now included, through one of two providers: [[doom-package:][all-the-icons]] and
@@ -285,8 +292,10 @@ By default, to maintain consistency we use [[doom-package:][all-the-icons]]; how
 to modify this you can do so using module flag [[doom-module:][+treemacs-icons]].
 
 ** helm-posframe
-Have a look at =helm-posframe.el=, to see which variables are available to users.
-These variables can be configured from your =$DOOMDIR/config.el=, using code similar to:
+Have a look at =helm-posframe.el=, to see which variables are available to
+users.
+These variables can be configured from your =$DOOMDIR/config.el=,
+using code similar to:
 
 #+begin_src emacs-lisp
 (after! helm
@@ -294,11 +303,13 @@ These variables can be configured from your =$DOOMDIR/config.el=, using code sim
     (setq helm-posframe-border-width 16)))
 #+end_src
 
-The most important variables, available to users, are already getting an inital value in =config.el= in this directory. Search for [[doom-module:][+childframe]] in that file.
+The most important variables, available to users, are already getting an
+inital value in =config.el= in this directory.
+Search for [[doom-module:][+childframe]] in that file.
 
 ** helm-projectile
 You may want to use the Helm versions of common Projectile commands.
-See: https://github.com/bbatsov/helm-projectile, section Usage.
+See: [[https://github.com/bbatsov/helm-projectile]], section Usage.
 This can be configured in your =$DOOMDIR/config.el=, using code similar to:
 
 #+begin_src emacs-lisp
@@ -307,8 +318,23 @@ This can be configured in your =$DOOMDIR/config.el=, using code similar to:
   (helm-projectile-on))
 #+end_src
 
-You may also want to change variable ~projectile-switch-project-action~, as suggested in https://tuhdo.github.io/helm-projectile.html, but doom already has a useful setting for that variable, that puts each project in its own workspace.
-See doom module [[doom-module:][:ui workspaces]].
-The helm module also defines workspace/project related commands such as ~+helm/workspace-mini~.
+You may also want to change variable ~projectile-switch-project-action~, as
+suggested in [[https://tuhdo.github.io/helm-projectile.html]], but doom
+already has a useful setting for that variable, that puts each project in
+its own workspace. See doom module [[doom-module:][:ui workspaces]].
+The helm module also defines workspace/project related commands,
+such as ~+helm/workspace-mini~.
 
 * Troubleshooting
+
+* Appendix
+
+** More about fuzzy matching and helm matching
+For example, try something
+similar to [[https://tuhdo.github.io/helm-intro.html#orgheadline2][helm-intro]] where tuhdo
+searches for the file i5100_edac.c. You should find that this works also
+when fuzzy matching is enabled.
+
+** More about emacs completion-styles
+For more about emacs completion-styles see
+[[https://www.masteringemacs.org/article/understanding-minibuffer-completion][understanding-minibuffer-completion]].
