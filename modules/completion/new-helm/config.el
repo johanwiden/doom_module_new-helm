@@ -41,6 +41,7 @@
           [remap bookmark-jump]             #'helm-bookmarks
           [remap execute-extended-command]  #'helm-M-x
           [remap find-file]                 #'helm-find-files
+          [remap ibuffer-find-file]         #'helm-find-files
           [remap locate]                    #'helm-locate
           [remap imenu]                     #'helm-semantic-or-imenu
           [remap noop-show-kill-ring]       #'helm-show-kill-ring
@@ -62,6 +63,12 @@
     (setq helm-posframe-border-width 8)
     (helm-posframe-enable))
 
+  (when (featurep! +autoresize)
+    (unless (featurep! +helm-popup-layout)
+      (progn
+        (setq helm-split-window-inside-p t)
+        (helm-autoresize-mode t))))
+
   (when (featurep! :editor evil +everywhere)
     (setq helm-default-prompt-display-function #'+helm--set-prompt-display))
 
@@ -78,6 +85,7 @@
           helm-projectile-fuzzy-match fuzzy
           helm-recentf-fuzzy-match fuzzy
           helm-semantic-fuzzy-match fuzzy)
+
     ;; Make sure that we have helm-multi-matching or fuzzy matching,
     ;; (as prescribed by the fuzzy flag) also in the following cases:
     ;;

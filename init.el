@@ -14,7 +14,7 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-;; NOTE My changes: Enabled helm. Disabled company, doom-dashboard, (evil +everywhere).
+;; NOTE My changes: Added new-helm. Disabled company, doom-dashboard, (evil +everywhere).
 
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
@@ -27,6 +27,7 @@
        ;;helm              ; the *other* search engine for love and life
        (new-helm           ; restructured helm module (more flags...)
         +ack-grep
+        +autoresize
         ;;+childframe
         +fuzzy
         ;;+helm-popup-layout

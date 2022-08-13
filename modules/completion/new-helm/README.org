@@ -45,6 +45,7 @@ For more info on Helm, see:
 
 ** Module Flags
 + =+ack-grep= Configure ~helm-ff-do-grep~ to use =ack= instead of =grep= for searching.
++ =+autoresize= The helm session window will be created within the current window. The session window height will be dynamically adjusted when few completion candidates remain.
 + =+childframe= Causes Helm to display in a floating child frame, above Emacs.
 + =+disable-helm-ff-lynx-style= Disable special action for <left>, <right> in ~find-file~.
 + =+fuzzy= Enables fuzzy completion for Helm searches. Recommended. One then gets both fuzzy matching and regular helm matching. For example, try something similar to https://tuhdo.github.io/helm-intro.html#orgheadline2 where tuhdo searches for the file i5100_edac.c. You should find that this works also when fuzzy matching is enabled.
