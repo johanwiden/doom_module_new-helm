@@ -98,10 +98,10 @@
         helm-ff-auto-update-initial-value t
         helm-ff-DEL-up-one-level-maybe t)
 
-  (unless (featurep! :completion new-helm +helm-popup-layout)
+  (unless (modulep! :completion new-helm +helm-popup-layout)
     (helm-autoresize-mode t))
 
-  (when (featurep! :completion new-helm +childframe)
+  (when (modulep! :completion new-helm +childframe)
     (setq helm-posframe-border-width 16))
 
   ;; Was bound to the consult variant
