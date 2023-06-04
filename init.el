@@ -33,6 +33,8 @@
         ;;+helm-popup-layout
         +helm-mode
         +icons
+        ;;+nerd-icons
+        ;;+treemacs-icons
         +remap-commands)
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
